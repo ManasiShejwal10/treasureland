@@ -1,55 +1,104 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <title>User Registration</title>
-  </head>
-  <body>
-    <h1 class="text-center my-4">Dive into history and unveil the treasures!</h1>
-    <!--Navigation bar-->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <a class="navbar-brand" href="index.php">Home</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-</nav>
+<?php
+session_start();
 
-<!--Form-->
-    <div class="container">
-      <h2 class="text-center my-4">Create Your Account</h2>
-      <div class="card mx-auto" style="max-width: 400px;">
-        <div class="card-body">
-          <form>
-            <div class="form-group">
-              <label for="name">Name</label>
-              <input type="text" class="form-control" id="name" placeholder="Enter your name">
+// Initialize an error message variable
+$errorMessage = '';
+$successMessage = '';
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Retrieve and sanitize user input
+    $username = trim($_POST['username']);
+    $email = trim($_POST['email']);
+    $password = trim($_POST['password']);
+
+    // Database connection details
+    $host = 'localhost';
+    $dbname = 'treasureland_db';
+    $user = 'root';
+    $pass = '';
+
+    try {
+        $pdo = new PDO("mysql:host=$host;dbname=$dbname", $user, $pass);
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        // Check if the email already exists
+        $stmt = $pdo->prepare("SELECT COUNT(*) FROM user_details WHERE Email = :email");
+        $stmt->bindParam(':email', $email);
+        $stmt->execute();
+        $userExists = $stmt->fetchColumn();
+
+        if ($userExists) {
+            $errorMessage = "An account with this email already exists.";
+        } else {
+            // Hash the password
+            $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+
+            // Insert the new user into the database
+            $stmt = $pdo->prepare("INSERT INTO user_details (User_name, Email, Password) VALUES (:username, :email, :password)");
+            $stmt->bindParam(':username', $username);
+            $stmt->bindParam(':email', $email);
+            $stmt->bindParam(':password', $hashed_password);
+
+            if ($stmt->execute()) {
+                $successMessage = "Registration successful! You can now log in.";
+                header("Location: login.php"); // Redirect to login page
+                exit();
+            } else {
+                $errorMessage = "An error occurred during registration. Please try again.";
+            }
+        }
+    } catch (PDOException $e) {
+        $errorMessage = "Database error: " . htmlspecialchars($e->getMessage());
+    }
+}
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" crossorigin="anonymous">
+    <title>Register | Treasureland</title>
+</head>
+<body>
+    <h1 class="text-center my-4">Create an Account</h1>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="index.php">Home</a>
+    </nav>
+
+    <div class="container my-5">
+        <?php if ($errorMessage): ?>
+            <div class="alert alert-danger"><?php echo $errorMessage; ?></div>
+        <?php elseif ($successMessage): ?>
+            <div class="alert alert-success"><?php echo $successMessage; ?></div>
+        <?php endif; ?>
+
+        <div class="card mx-auto" style="max-width: 400px;">
+            <div class="card-body">
+                <form method="POST">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" class="form-control" name="username" id="username" placeholder="Enter your username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control" name="email" id="email" placeholder="Enter your email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" class="form-control" name="password" id="password" placeholder="Enter your password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Register</button>
+                </form>
+                <div class="extra-links mt-3">
+                    <a href="login.php">Already have an account? Log in here!</a>
+                </div>
             </div>
-            <div class="form-group">
-              <label for="email">Email</label>
-              <input type="email" class="form-control" id="email" placeholder="Enter your email">
-            </div>
-            <div class="form-group">
-              <label for="password">Password</label>
-              <input type="password" class="form-control" id="password" placeholder="Enter your password">
-            </div>
-            <div class="form-group">
-              <label for="password">Confirm Password</label>
-              <input type="password" class="form-control" id="cfmpassword" placeholder="Confirm your password">
-            </div>
-            <button type="submit" class="btn btn-success btn-block">Register</button>
-          
-          </form>
-          <div class="extra-links mt-3">
-            <a href="login.php">Already have an account?</a>
         </div>
-        </div>
-      </div>
-      
     </div>
 
-    <!--JavaScript -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+</body>
 </html>
