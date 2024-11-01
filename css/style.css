@@ -1,0 +1,25 @@
+/* Footer CSS */
+html, body {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.container {
+    flex: 1; /* Allows the container to grow and take up space */
+}
+
+footer {
+    position: relative;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #343a40; /* Ensures footer background color */
+    color: #f8f9fa;
+    padding: 1rem 0;
+}
+
+.product-card{
+    max-width: 20vh;
+}

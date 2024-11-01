@@ -8,9 +8,46 @@ session_start();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" crossorigin="anonymous">
-    <title>Product Details</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="css/style.css">
+    <title>Treasureland | Product Details</title>
 </head>
 <body>
+<h1 class="text-center my-4">Dive into history and unveil the treasures!</h1>
+
+<!-- Navigation bar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="index.php">Home</a>
+    <div class="collapse navbar-collapse">
+        <ul class="navbar-nav ml-auto">
+            <?php if (isset($_SESSION['user_id'])): ?>
+                <li class="nav-item">
+                    <span class="navbar-text">Hello, <?php echo htmlspecialchars($_SESSION['user_name']); ?>!</span>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="logout.php">Logout</a>
+                </li>
+            <?php else: ?>
+                <li class="nav-item active">
+                    <a class="nav-link" href="login.php">Log in</a>
+                </li>
+            <?php endif; ?>
+            <li class="nav-item">
+                <a class="nav-link" href="shop.php">Shop</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="aboutus.php">About us</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="cart.php">
+                    <i class="fa-solid fa-cart-plus"></i> 
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+
     <div class="container my-5">
         <?php if (isset($_SESSION['success'])): ?>
             <div class="alert alert-success"><?php echo $_SESSION['success']; unset($_SESSION['success']); ?></div>
@@ -41,7 +78,7 @@ session_start();
                 
                 if ($product) {
                     echo '<h2 class="text-center mb-4">' . htmlspecialchars($product['product_name']) . '</h2>';
-                    echo '<div class="card mb-4">';
+                    echo '<div class="card mb-4 d-flex flex-row">';
                     echo '    <img src="' . htmlspecialchars($product['product_img'] ?? 'default.jpg') . '" class="w-50 card-img-top" alt="Product Image">';
                     echo '    <div class="card-body">';
                     echo '        <h5 class="card-title">' . htmlspecialchars($product['product_name']) . '</h5>';
@@ -76,4 +113,31 @@ session_start();
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 </body>
+
+<!-- Footer Section -->
+<footer class="bg-dark text-light py-1">
+    <div class="container">
+        <div class="row">
+
+            <!-- Contact Section -->
+            <div class="col-md-4 mb-3 mt-3">
+                <h5>Contact Us</h5>
+                <p class="small mb-1"><i class="fas fa-map-marker-alt"></i> 123 Treasureland Street, City, Country</p>
+                <p class="small mb-1"><i class="fas fa-phone"></i> +123 456 7890</p>
+                <p class="small"><i class="fas fa-envelope"></i> support@treasureland.com</p>
+            </div>
+        </div>
+
+        <!-- Copyright Section -->
+        <div class="row">
+            <div class="col mb-3 ">
+                <p class="small mb-0">&copy; <?php echo date("Y"); ?> Treasureland. All rights reserved.</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Add FontAwesome for icons -->
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
 </html>

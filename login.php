@@ -53,6 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/style.css">
     <title>Login | Treasureland</title>
 </head>
 <body>
@@ -89,4 +90,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 </body>
+<!-- Footer Section -->
+<footer class="bg-dark text-light py-1">
+    <div class="container">
+        <div class="row">
+
+            <!-- Contact Section -->
+            <div class="col-md-4 mb-3 mt-3">
+                <h5>Contact Us</h5>
+                <p class="small mb-1"><i class="fas fa-map-marker-alt"></i> 123 Treasureland Street, City, Country</p>
+                <p class="small mb-1"><i class="fas fa-phone"></i> +123 456 7890</p>
+                <p class="small"><i class="fas fa-envelope"></i> support@treasureland.com</p>
+            </div>
+        </div>
+
+        <!-- Copyright Section -->
+        <div class="row">
+            <div class="col mb-3 ">
+                <p class="small mb-0">&copy; <?php echo date("Y"); ?> Treasureland. All rights reserved.</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Add FontAwesome for icons -->
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
 </html>
