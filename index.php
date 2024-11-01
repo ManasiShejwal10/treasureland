@@ -14,7 +14,6 @@ try {
     // Fetch featured products from the database
     $stmt = $pdo->query("SELECT product_id, product_img, product_name, description, price FROM product_details LIMIT 3");
     $featuredProducts = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
 } catch (PDOException $e) {
     $errorMessage = "Database error: " . htmlspecialchars($e->getMessage());
 }
@@ -22,6 +21,7 @@ try {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -34,157 +34,173 @@ try {
         max-height: 200px;
         overflow-y: auto;
     }
+
     .dropdown-item {
         cursor: pointer;
     }
+
     .product-card .card-img-top {
-        height: 200px; /* Set a fixed height for images */
-        object-fit: cover; /* Crop images to fill the area without stretching */
+        height: 200px;
+        /* Set a fixed height for images */
+        object-fit: cover;
+        /* Crop images to fill the area without stretching */
         width: 100%;
     }
+
     .product-card .card {
-        height: 100%; /* Make all cards the same height */
+        height: 100%;
+        /* Make all cards the same height */
         display: flex;
         flex-direction: column;
     }
+
     .product-card .card-body {
-        flex-grow: 1; /* Ensures card-body takes up remaining space in the card */
+        flex-grow: 1;
+        /* Ensures card-body takes up remaining space in the card */
         display: flex;
         flex-direction: column;
         justify-content: space-between;
     }
+
     .product-card .card-title {
         font-size: 1.1em;
         font-weight: bold;
         overflow: hidden;
-        white-space: nowrap; /* Prevents text from wrapping */
-        text-overflow: ellipsis; /* Adds "..." for long text */
+        white-space: nowrap;
+        /* Prevents text from wrapping */
+        text-overflow: ellipsis;
+        /* Adds "..." for long text */
     }
+
     .product-card .card-text {
         font-size: 0.9em;
         color: #6c757d;
         display: -webkit-box;
-        -webkit-line-clamp: 2; /* Limit description to 2 lines */
+        -webkit-line-clamp: 2;
+        /* Limit description to 2 lines */
         -webkit-box-orient: vertical;
         overflow: hidden;
         text-overflow: ellipsis;
     }
+
     .product-card .text-success {
         font-size: 1em;
         font-weight: 600;
     }
-
 </style>
+
 <body>
     <h1 class="text-center my-4">Dive into history and unveil the treasures!</h1>
 
-   <!-- Navigation bar -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="index.php">Home</a>
-    <div class="collapse navbar-collapse">
-        <ul class="navbar-nav ml-auto">
-            <?php if (isset($_SESSION['user_id'])): ?>
-                <!-- Dropdown for user profile and logout -->
-<li class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-        Hello, <?php echo htmlspecialchars($_SESSION['user_name']); ?>
-    </a>
-    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-        <li><a class="dropdown-item" href="logout.php">Logout</a></li>
-    </ul>
-</li>
+    <!-- Navigation bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="index.php">Home</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ml-auto">
+                <?php if (isset($_SESSION['user_id'])): ?>
+                    <!-- Dropdown for user profile and logout -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Hello, <?php echo htmlspecialchars($_SESSION['user_name']); ?>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" href="logout.php">Logout</a></li>
+                        </ul>
+                    </li>
 
-            <?php else: ?>
-                <li class="nav-item active">
-                    <a class="nav-link" href="login.php">Log in</a>
+                <?php else: ?>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="login.php">Log in</a>
+                    </li>
+                <?php endif; ?>
+                <li class="nav-item">
+                    <a class="nav-link" href="shop.php">Shop</a>
                 </li>
-            <?php endif; ?>
-            <li class="nav-item">
-                <a class="nav-link" href="shop.php">Shop</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="aboutus.php">About Us</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="cart.php">
-                    <i class="fa-solid fa-cart-plus"></i>
-                </a>
-            </li>
-        </ul>
-    </div>
-</nav>
+                <li class="nav-item">
+                    <a class="nav-link" href="aboutus.php">About Us</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="cart.php">
+                        <i class="fa-solid fa-cart-plus"></i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
 
 
-<!--Carousel Section-->
-<div id="carouselExampleIndicators" class="carousel slide">
-  <div class="carousel-indicators">
-    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
-    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
-  </div>
-  <div class="carousel-inner">
-    <div class="carousel-item active">
-      <img src="https://www.soane.org/sites/default/files/banners/Photograph-Picture-Room-Soane-Museum-with-Canaletto-Hogarth-visible.jpg" class="d-block w-100" alt="..." style="height: 300px; object-fit: cover;">
+    <!--Carousel Section-->
+    <div id="carouselExampleIndicators" class="carousel slide">
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+        </div>
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="https://www.soane.org/sites/default/files/banners/Photograph-Picture-Room-Soane-Museum-with-Canaletto-Hogarth-visible.jpg" class="d-block w-100" alt="..." style="height: 300px; object-fit: cover;">
+            </div>
+            <div class="carousel-item">
+                <img src="https://www.ancientsculpturegallery.com/wp-content/themes/ancientsculpturegallery/assets/images/b3.jpg" class="d-block w-100" alt="..." style="height: 300px; object-fit: cover;">
+            </div>
+            <div class="carousel-item">
+                <img src="https://www.ancientsculpturegallery.com/wp-content/themes/ancientsculpturegallery/assets/images/b6.jpg" class="d-block w-100" alt="..." style="height: 300px; object-fit: cover;">
+            </div>
+        </div>
+        <button class="carousel-control-prev bg-transparent border-0" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden ">Previous</span>
+        </button>
+        <button class="carousel-control-next bg-transparent border-0" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
     </div>
-    <div class="carousel-item">
-      <img src="https://www.ancientsculpturegallery.com/wp-content/themes/ancientsculpturegallery/assets/images/b3.jpg" class="d-block w-100" alt="..." style="height: 300px; object-fit: cover;">
-    </div>
-    <div class="carousel-item">
-      <img src="https://www.ancientsculpturegallery.com/wp-content/themes/ancientsculpturegallery/assets/images/b6.jpg" class="d-block w-100" alt="..." style="height: 300px; object-fit: cover;">
-    </div>
-  </div>
-  <button class="carousel-control-prev bg-transparent border-0" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
-    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-    <span class="visually-hidden ">Previous</span>
-  </button>
-  <button class="carousel-control-next bg-transparent border-0" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-    <span class="visually-hidden">Next</span>
-  </button>
-</div>
 
-<style>
-  /* Additional CSS to adjust the carousel height */
-  .carousel-inner img {
-    height: 300px; /* Set your desired height here */
-    object-fit: cover; /* Ensures the image covers the area without distortion */
-  }
-</style>
+    <style>
+        /* Additional CSS to adjust the carousel height */
+        .carousel-inner img {
+            height: 300px;
+            /* Set your desired height here */
+            object-fit: cover;
+            /* Ensures the image covers the area without distortion */
+        }
+    </style>
 
 
 
     <!-- Featured Products Section -->
-<div class="container my-5">
-    <h2 class="text-center mb-4">Featured Products</h2>
-    <div class="row">
-        <?php if (isset($errorMessage)): ?>
-            <div class="alert alert-danger"><?php echo $errorMessage; ?></div>
-        <?php else: ?>
-            <?php foreach ($featuredProducts as $product): ?>
-                <div class="col-md-4 mb-4 product-card" data-name="<?php echo htmlspecialchars($product['product_name']); ?>">
-                    <div class="card shadow-sm">
-                        <img src="<?php echo htmlspecialchars($product['product_img']); ?>" class="card-img-top" alt="Product Image">
-                        <div class="card-body">
-                            <h5 class="card-title"><?php echo htmlspecialchars($product['product_name']); ?></h5>
-                            <!-- <p class="card-text text-muted"><?php echo htmlspecialchars($product['description']); ?></p> -->
-                            <h6 class="text-success">$<?php echo htmlspecialchars(number_format($product['price'], 2)); ?></h6>
-                            <a href="product_details.php?id=<?php echo $product['product_id']; ?>" class="btn btn-primary btn-block">View Details</a>
+    <div class="container my-5">
+        <h2 class="text-center mb-4">Featured Products</h2>
+        <div class="row">
+            <?php if (isset($errorMessage)): ?>
+                <div class="alert alert-danger"><?php echo $errorMessage; ?></div>
+            <?php else: ?>
+                <?php foreach ($featuredProducts as $product): ?>
+                    <div class="col-md-4 mb-4 product-card" data-name="<?php echo htmlspecialchars($product['product_name']); ?>">
+                        <div class="card shadow-sm">
+                            <img src="<?php echo htmlspecialchars($product['product_img']); ?>" class="card-img-top" alt="Product Image">
+                            <div class="card-body">
+                                <h5 class="card-title"><?php echo htmlspecialchars($product['product_name']); ?></h5>
+                                <!-- <p class="card-text text-muted"><?php echo htmlspecialchars($product['description']); ?></p> -->
+                                <h6 class="text-success">$<?php echo htmlspecialchars(number_format($product['price'], 2)); ?></h6>
+                                <a href="product_details.php?id=<?php echo $product['product_id']; ?>" class="btn btn-primary btn-block">View Details</a>
+                            </div>
                         </div>
                     </div>
-                </div>
-            <?php endforeach; ?>
-        <?php endif; ?>
-    </div>
+                <?php endforeach; ?>
+            <?php endif; ?>
+        </div>
 
-    <!-- See More Button -->
-    <div class="text-center mt-4">
-        <a href="shop.php" class="btn btn-success">See More</a>
+        <!-- See More Button -->
+        <div class="text-center mt-4">
+            <a href="shop.php" class="btn btn-success">See More</a>
+        </div>
     </div>
-</div>
 
     <!-- JavaScript for Bootstrap -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
-    
+
 </body>
 
 <!-- Footer Section -->
@@ -209,5 +225,5 @@ try {
         </div>
     </div>
 </footer>
-</html>
 
+</html>

@@ -10,6 +10,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = trim($_POST['username']);
     $email = trim($_POST['email']);
     $password = trim($_POST['password']);
+    $confirm_password = trim($_POST['confirm_password']); // Get the confirm password
 
     // Database connection details
     $host = 'localhost';
@@ -61,6 +62,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" crossorigin="anonymous">
     <link rel="stylesheet" href="css/style.css">
     <title>Register | Treasureland</title>
+    <style>
+        /* Additional styles can be added here */
+    </style>
 </head>
 <body>
     <h1 class="text-center my-4">Create an Account</h1>
@@ -78,7 +82,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         <div class="card mx-auto" style="max-width: 400px;">
             <div class="card-body">
-                <form method="POST">
+                <form method="POST" onsubmit="return validateForm()">
                     <div class="form-group">
                         <label for="username">Username</label>
                         <input type="text" class="form-control" name="username" id="username" placeholder="Enter your username" required>
@@ -91,6 +95,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <label for="password">Password</label>
                         <input type="password" class="form-control" name="password" id="password" placeholder="Enter your password" required>
                     </div>
+                    <div class="form-group">
+                        <label for="confirm_password">Confirm Password</label>
+                        <input type="password" class="form-control" name="confirm_password" id="confirm_password" placeholder="Confirm your password" required>
+                    </div>
                     <button type="submit" class="btn btn-primary btn-block">Register</button>
                 </form>
                 <div class="extra-links mt-3">
@@ -101,32 +109,51 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script>
+        function validateForm() {
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm_password').value;
+            const passwordMinLength = 8;
+
+            // Check password length
+            if (password.length < passwordMinLength) {
+                alert(`Password must be at least ${passwordMinLength} characters long.`);
+                return false; // Prevent form submission
+            }
+
+            // Check if passwords match
+            if (password !== confirmPassword) {
+                alert("Passwords do not match. Please try again.");
+                return false; // Prevent form submission
+            }
+
+            return true; // Allow form submission
+        }
+    </script>
+
+    <!-- Footer Section -->
+    <footer class="bg-dark text-light py-1">
+        <div class="container">
+            <div class="row">
+                <!-- Contact Section -->
+                <div class="col-md-4 mb-3 mt-3">
+                    <h5>Contact Us</h5>
+                    <p class="small mb-1"><i class="fas fa-map-marker-alt"></i> 123 Treasureland Street, City, Country</p>
+                    <p class="small mb-1"><i class="fas fa-phone"></i> +123 456 7890</p>
+                    <p class="small"><i class="fas fa-envelope"></i> support@treasureland.com</p>
+                </div>
+            </div>
+            <!-- Copyright Section -->
+            <div class="row">
+                <div class="col mb-3 ">
+                    <p class="small mb-0">&copy; <?php echo date("Y"); ?> Treasureland. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Add FontAwesome for icons -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
 </body>
-
-<!-- Footer Section -->
-<footer class="bg-dark text-light py-1">
-    <div class="container">
-        <div class="row">
-
-            <!-- Contact Section -->
-            <div class="col-md-4 mb-3 mt-3">
-                <h5>Contact Us</h5>
-                <p class="small mb-1"><i class="fas fa-map-marker-alt"></i> 123 Treasureland Street, City, Country</p>
-                <p class="small mb-1"><i class="fas fa-phone"></i> +123 456 7890</p>
-                <p class="small"><i class="fas fa-envelope"></i> support@treasureland.com</p>
-            </div>
-        </div>
-
-        <!-- Copyright Section -->
-        <div class="row">
-            <div class="col mb-3 ">
-                <p class="small mb-0">&copy; <?php echo date("Y"); ?> Treasureland. All rights reserved.</p>
-            </div>
-        </div>
-    </div>
-</footer>
-
-<!-- Add FontAwesome for icons -->
-<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-
 </html>

@@ -4,13 +4,16 @@ session_start();
 // Initialize error message variable
 $errorMessage = '';
 
+// Capture the URL of the page the user came from, if not already set
+$redirectURL = isset($_GET['redirect']) ? $_GET['redirect'] : (isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : 'shop.php');
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-  // Get user input and sanitize
-  $email = trim($_POST['email']);
-  $password = trim($_POST['password']);
-  echo 'SELECT User_id, User_name, Password FROM user_details WHERE Email = "'.$email.'" LIMIT 1';
-  
-  // Database connection details
+    // Get user input and sanitize
+    $email = trim($_POST['email']);
+    $password = trim($_POST['password']);
+    $redirectURL = trim($_POST['redirectURL']); // Capture redirect URL from form submission
+
+    // Database connection details
     $host = 'localhost';
     $dbname = 'treasureland_db';
     $user = 'root';
@@ -21,8 +24,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
         // Prepare a query to fetch user details by email
-        // bindParam(':email', $email);
-        $stmt = $pdo->prepare('SELECT User_id, User_name, Password FROM user_details WHERE Email = "'.$email.'" LIMIT 1');
+        $stmt = $pdo->prepare("SELECT User_id, User_name, Password FROM user_details WHERE Email = :email LIMIT 1");
+        $stmt->bindParam(':email', $email);
         $stmt->execute();
 
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -34,8 +37,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $_SESSION['user_name'] = $user['User_name'];
             $_SESSION['success'] = "Welcome, " . $user['User_name'] . "! You have successfully logged in.";
 
-            // Redirect to the shop or home page
-            header("Location: shop.php");
+            // Redirect to the captured page or default to shop.php
+            header("Location: $redirectURL");
             exit();
         } else {
             // Display error message for invalid credentials
@@ -79,10 +82,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <label for="password">Password</label>
                         <input type="password" class="form-control" name="password" id="password" placeholder="Enter your password" required>
                     </div>
+                    <input type="hidden" name="redirectURL" value="<?php echo htmlspecialchars($redirectURL); ?>">
                     <button type="submit" class="btn btn-primary btn-block">Log In</button>
                 </form>
                 <div class="extra-links mt-3">
-                    <a href="register.php">Don't have an account? Register here!</a>
+                    <a href="register.php?redirect=<?php echo urlencode($redirectURL); ?>">Don't have an account? Register here!</a>
                 </div>
             </div>
         </div>
@@ -94,7 +98,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <footer class="bg-dark text-light py-1">
     <div class="container">
         <div class="row">
-
             <!-- Contact Section -->
             <div class="col-md-4 mb-3 mt-3">
                 <h5>Contact Us</h5>
