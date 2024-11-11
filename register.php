@@ -41,8 +41,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt->bindParam(':password', $hashed_password);
 
             if ($stmt->execute()) {
-                $successMessage = "Registration successful! You can now log in.";
-                header("Location: login.php"); // Redirect to login page
+                // Fetch the user ID of the newly created account
+                $userId = $pdo->lastInsertId();
+
+                // Set session variables to log the user in
+                $_SESSION['user_id'] = $userId;
+                $_SESSION['user_name'] = $username;
+                $_SESSION['success'] = "Welcome, $username! You have successfully registered and logged in.";
+
+                // Redirect to the home page
+                header("Location: index.php"); // Redirect to your home page
                 exit();
             } else {
                 $errorMessage = "An error occurred during registration. Please try again.";
@@ -62,15 +70,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" crossorigin="anonymous">
     <link rel="stylesheet" href="css/style.css">
     <title>Register | Treasureland</title>
-    <style>
-        /* Additional styles can be added here */
-    </style>
-</head>
-<body>
     <h1 class="text-center my-4">Create an Account</h1>
+</head>
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="index.php">Home</a>
+<body>
+    
+<!-- Navigation bar -->
+<nav class="navbar navbar-expand-lg bg-body-tertiary bg-dark ">
+        <div class="container-fluid">
+        <a class="navbar-brand" href="index.php">
+            <img src="logo.png" alt="Treasureland Logo" style="height: 40px;"> <!-- Adjust the height as needed -->
+        </a>
+        <a class="navbar-brand text-white mr-auto" href="index.php">Home</a>
+        </div>
     </nav>
 
     <div class="container my-5">

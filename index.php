@@ -12,7 +12,7 @@ try {
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     // Fetch featured products from the database
-    $stmt = $pdo->query("SELECT product_id, product_img, product_name, description, price FROM product_details LIMIT 3");
+    $stmt = $pdo->query("SELECT product_id, product_img, product_name, description, price FROM product_details WHERE Stock=1 LIMIT 3");
     $featuredProducts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     $errorMessage = "Database error: " . htmlspecialchars($e->getMessage());
@@ -28,6 +28,7 @@ try {
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <title>Treasureland | Home</title>
+    <h1 class="text-center my-4">Welcome to Treasureland!</h1>
 </head>
 <style>
     .dropdown-menu {
@@ -90,45 +91,53 @@ try {
 </style>
 
 <body>
-    <h1 class="text-center my-4">Dive into history and unveil the treasures!</h1>
+    
 
     <!-- Navigation bar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="index.php">Home</a>
-        <div class="collapse navbar-collapse">
-            <ul class="navbar-nav ml-auto">
-                <?php if (isset($_SESSION['user_id'])): ?>
-                    <!-- Dropdown for user profile and logout -->
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Hello, <?php echo htmlspecialchars($_SESSION['user_name']); ?>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                            <li><a class="dropdown-item" href="logout.php">Logout</a></li>
-                        </ul>
-                    </li>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary bg-dark ">
+        <div class="container-fluid">
+        <a class="navbar-brand" href="index.php">
+            <img src="logo.png" alt="Treasureland Logo" style="height: 40px;"> <!-- Adjust the height as needed -->
+        </a>
+        <a class="navbar-brand text-white" href="index.php">Home</a>
+            <button class="navbar-toggler " type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon" style="background-image: url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 30 30%27%3E%3Cpath stroke=%27rgba(255, 255, 255, 1)%27 stroke-width=%272%27 d=%27M4 7h22M4 15h22M4 23h22%27/%3E%3C/svg%3E');"></span>
 
-                <?php else: ?>
-                    <li class="nav-item active">
-                        <a class="nav-link" href="login.php">Log in</a>
+            </button>
+            <div class="collapse navbar-collapse " id="navbarNavDropdown">
+                <ul class="navbar-nav ml-auto">
+                    <?php if (isset($_SESSION['user_id'])): ?>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link text-white dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Hello, <?php echo htmlspecialchars($_SESSION['user_name']); ?>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                <li><a class="dropdown-item" href="profile.php">My Profile</a></li>
+                                <li><a class="dropdown-item" href="logout.php">Logout</a></li>
+                            </ul>
+                        </li>
+                    <?php else: ?>
+                        <li class="nav-item active">
+                            <a class="nav-link text-white" href="login.php">Log in</a>
+                        </li>
+                    <?php endif; ?>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="shop.php">Shop</a>
                     </li>
-                <?php endif; ?>
-                <li class="nav-item">
-                    <a class="nav-link" href="shop.php">Shop</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="aboutus.php">About Us</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="cart.php">
-                        <i class="fa-solid fa-cart-plus"></i>
-                    </a>
-                </li>
-            </ul>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="aboutus.php">About Us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="cart.php">
+                            <i class="fa-solid fa-cart-plus"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </nav>
 
-
+   
     <!--Carousel Section-->
     <div id="carouselExampleIndicators" class="carousel slide">
         <div class="carousel-indicators">
