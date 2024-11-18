@@ -78,3 +78,4 @@ if (isset($_POST['product_id']) && is_numeric($_POST['product_id']) && isset($_P
     header("Location: cart.php");
     exit();
 }
+
